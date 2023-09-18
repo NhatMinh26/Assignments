@@ -14,12 +14,9 @@ class Node {
 
 class LinkedList {
 	private:
-		int n;
-	public:
 		Node* head;
-		
+	public:
 		LinkedList() {
-			n = 0;
 			head = NULL;
 		}
 		
@@ -30,51 +27,44 @@ class LinkedList {
 				newNode->next = head;
 				head = newNode;
 			}
-			else if (pos == n) {
-				Node* prevNode = head;
-				while (prevNode->next != NULL) {
-					prevNode = prevNode->next;
-				}
-				prevNode->next = newNode;
-			}
 			else {
-				Node* prevNode = head;
-				for (int i=0; i<=pos; i++) {
-					prevNode = prevNode->next;
+				Node* current = head;
+				for (int i=0; i<pos-1; i++) {
+					current = current->next;
 				}
-				Node* nextNode = prevNode->next;
-				newNode->next = nextNode;
-				prevNode->next = newNode;
+				if (current) {
+					newNode->next = current->next;
+					current->next = newNode;
+				}
 			}
-			n++;
 		}
 		
 		void deleteNode(int pos) {
 			if (pos == 0) {
-				head = head->next;
-			}
-			else if (pos == n) {
-				Node* prevNode = head;
-				while (prevNode->next != NULL) {
-					prevNode = prevNode->next;
+				if (head) {
+					Node* temp = head;
+					head = head->next;
+					delete temp;
 				}
-				prevNode->next = NULL;
 			}
 			else {
-				Node* prevNode = head;
-				for (int i=0; i<pos; i++) {
-					prevNode = prevNode->next;
+				Node* current = head;
+				for (int i=0; i<pos-1; i++) {
+					current = current->next;
 				}
-				prevNode->next = prevNode->next->next;
+				if (current && current->next) {
+					Node* temp = current->next;
+					current->next = current->next->next;
+					delete temp;
+				}
 			}
-			n--;
 		}
 		
 		void print() {
-			Node* node = head;
-			while (node != NULL) {
-				cout << node->data << " ";
-				node = node->next;
+			Node* current = head;
+			while (current) {
+				cout << current->data << " ";
+				current = current->next;
 			}
 			cout << endl;
 		}
@@ -84,15 +74,16 @@ int main() {
 	int n;
 	cin >> n;
 	LinkedList l;
-	while (n--) {
+	for (int i=0; i<n; i++) {
 		string method;
-		int p, x;
 		cin >> method;
 		if (method == "insert") {
+			int p, x;
 			cin >> p >> x;
 			l.insertNode(p, x);
 		}
 		else if (method == "delete") {
+			int p;
 			cin >> p;
 			l.deleteNode(p);
 		}
